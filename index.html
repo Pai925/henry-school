@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>白鈜宇｜學習歷程與多元表現</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="nav" aria-label="主導覽">
+    <div class="nav-inner">
+      <a class="brand" href="index.html" aria-label="回首頁">白鈜宇 <span>Portfolio</span></a>
+      <button class="nav-toggle" aria-controls="site-menu" aria-expanded="false">☰</button>
+      <div id="site-menu" class="nav-links">
+        <a href="index.html" aria-current="page">首頁</a>
+        <a href="junior.html">國中階段</a>
+        <a href="senior.html">高中階段</a>
+        <a href="projects.html">專題與創作</a>
+        <a href="mailto:henrypai180@gmail.com">聯絡我</a>
+      </div>
+    </div>
+  </nav>
+
+  <header>
+    <div>
+      <h1>白鈜宇｜不只是學習，更是創造未來的實驗</h1>
+      <p>數位學習歷程與多元表現</p>
+    </div>
+  </header>
+
+  <section id="timeline">
+    <h2 class="reveal">學習歷程時間軸</h2>
+    <div class="timeline">
+      <a class="timeline-link" href="junior.html">
+        <div class="timeline-item reveal">
+          <h3>國中階段</h3>
+          <p>就讀美術班，參與校內外美展與文藝參訪，培養觀察力、構圖與色彩表達。</p>
+        </div>
+      </a>
+      <a class="timeline-link" href="senior.html">
+        <div class="timeline-item reveal">
+          <h3>高中階段</h3>
+          <p>就讀電子科：電路與焊接、微控制器(ESP32/STM32)、通訊協定與專題實作。</p>
+        </div>
+      </a>
+      <a class="timeline-link" href="projects.html">
+        <div class="timeline-item reveal">
+          <h3>專題與創作</h3>
+          <p>從電路設計到人工智慧應用，將點子化為實體成果。</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section id="portfolio">
+    <h2 class="reveal">多元表現</h2>
+    <div class="card-grid">
+      <div class="card reveal">
+        <h3>志工服務</h3>
+        <p>參與「修但」志工團體，投入親子共學與教育活動。</p>
+      </div>
+      <div class="card reveal">
+        <h3>比賽經驗</h3>
+        <p>科技競賽、創新專題展，勇於挑戰，累積實戰經驗。</p>
+      </div>
+      <div class="card reveal">
+        <h3>藝術創作</h3>
+        <p>以手作與設計為媒介，展現跨領域創造力。</p>
+      </div>
+    </div>
+  </section>
+
+  <footer><p>© 2025 白鈜宇 | 聯繫方式：henrypai180@gmail.com</p></footer>
+
+  <script>
+    // 手機漢堡選單
+    const btn = document.querySelector('.nav-toggle');
+    const menu = document.getElementById('site-menu');
+    btn?.addEventListener('click', ()=> {
+      const open = menu.classList.toggle('show');
+      btn.setAttribute('aria-expanded', open?'true':'false');
+    });
+
+    // 滾動滑入動畫
+    (function(){
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduced){ document.querySelectorAll('.reveal').forEach(el=>el.classList.add('show')); return; }
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){
+            const el = entry.target;
+            const siblings = Array.from(el.parentElement?.children||[]);
+            const idx = Math.max(0, siblings.indexOf(el));
+            el.style.transitionDelay = (idx*90)+'ms';
+            el.classList.add('show');
+            io.unobserve(el);
+          }
+        });
+      }, {threshold:.15, rootMargin:'0px 0px -10% 0px'});
+      document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+    })();
+
+    /* Cursor Follow Glow v4 — start hidden until first mousemove */
+    (function(){
+      if (matchMedia('(max-width: 900px)').matches) return;
+      if (matchMedia('(hover: none)').matches) return;
+
+      let glow = document.querySelector('.cursor-light');
+      if (!glow) {
+        glow = document.createElement('div');
+        glow.className = 'cursor-light';
+        document.body.appendChild(glow);
+      }
+
+      let targetX = window.innerWidth * 0.5;
+      let targetY = window.innerHeight * 0.4;
+      let idleTimer = null;
+      let activated = false;
+
+      function setPos(x, y){
+        glow.style.setProperty('--mx', x + 'px');
+        glow.style.setProperty('--my', y + 'px');
+      }
+
+      function activate(){
+        if (!activated){
+          glow.classList.add('is-active'); // 出現
+          activated = true;
+        }
+      }
+
+      window.addEventListener('mousemove', (e)=>{
+        activate();
+        glow.classList.remove('is-hidden','is-idle');
+        targetX = e.clientX;
+        targetY = e.clientY;
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(()=> glow.classList.add('is-idle'), 1200);
+      }, {passive:true});
+
+      window.addEventListener('scroll', ()=>{
+        if (activated){
+          glow.classList.remove('is-hidden','is-idle');
+          clearTimeout(idleTimer);
+          idleTimer = setTimeout(()=> glow.classList.add('is-idle'), 1200);
+        }
+      }, {passive:true});
+
+      window.addEventListener('blur', ()=> glow.classList.add('is-hidden'));
+      window.addEventListener('mouseleave', ()=> glow.classList.add('is-hidden'));
+      window.addEventListener('mouseenter', ()=> {
+        if (activated) glow.classList.remove('is-hidden');
+      });
+
+      function draw(){
+        setPos(targetX, targetY);
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+  </script>
+</body>
+</html>
